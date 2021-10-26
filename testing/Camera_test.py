@@ -1,8 +1,6 @@
 import pixellib
 from pixellib.semantic import semantic_segmentation
-from pixellib.instance import instance_segmentation
 import numpy as np
-
 import cv2
 import os
 
