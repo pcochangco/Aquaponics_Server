@@ -8,7 +8,7 @@ import os
 
 def moveCamera():
  
-def ratio_to_actual():
+def ratio_to_actual(image_pixel_ratio):
 
 def takeImage():
     from picamera import PiCamera
@@ -36,7 +36,7 @@ for filename in os.listdir(directory):
         overall_ratio.append(ratio)
         cv2.imshow(output)
 image_pixel_ratio = round(sum(overall_ratio)/len(overall_ratio),2)
-print("Ratio average is", image_pixel_ratio)
+print("Average ratio of image to image pixel is", image_pixel_ratio)
 size = ratio_to_actual(image_pixel_ratio)
-print("")
+print("Image size is", size)
         
