@@ -2,17 +2,30 @@ import pixellib
 from pixellib.semantic import semantic_segmentation
 from pixellib.instance import instance_segmentation
 import numpy as np
+
 import cv2
 import os
 
 def moveCamera():
+ 
+def ratio_to_actual():
 
 def takeImage():
-
+    from picamera import PiCamera
+    from time import sleep
+    camera = PiCamera()
+    time.sleep(2)
+    camera.resolution = (1280, 720)
+    camera.vflip = True
+    camera.contrast = 10
+    file_name = "/home/pi/Pictures/img_" + str(time.time()) + ".jpg"
+    camera.capture(file_name)
+    print("Picture taken.")
 
 segment_image = semantic_segmentation()
 segment_image.load_ade20k_model("/deeplabv3_xception65_ade20k.h5")
-directory = "images addr to segment"
+directory = "/home/pi/Pictures/"
+overall_ratio = []
 for filename in os.listdir(directory):
     if filename.endswith(".jpg"):
         ratio = 0
@@ -20,5 +33,10 @@ for filename in os.listdir(directory):
         for item in ["plant", "tree", "grass"]:
             if item in segvalues["class_names"]:
                  ratio = ratio + segvalues["ratios"][segvalues["class_names"].index(item)]
-        print("Image ratio to area is {}%".format(round(ratio),2))
+        overall_ratio.append(ratio)
         cv2.imshow(output)
+image_pixel_ratio = round(sum(overall_ratio)/len(overall_ratio),2)
+print("Ratio average is", image_pixel_ratio)
+size = ratio_to_actual(image_pixel_ratio)
+print("")
+        
