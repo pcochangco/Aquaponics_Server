@@ -29,5 +29,10 @@ def measureDistance_cm():
     
     pulse_duration = pulse_end - pulse_start
     distance = pulse_duration * 17150
-    distance = round (distance, 2)    
+    distance = round (distance, 2)
+    print("Measured distance: "+ distance + "cm")
     return distance
+
+GPIO_init()
+measureDistance_cm()
+def measureDistance_cm()
