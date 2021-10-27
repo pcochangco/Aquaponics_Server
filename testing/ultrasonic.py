@@ -35,4 +35,3 @@ def measureDistance_cm():
 
 GPIO_init()
 measureDistance_cm()
-def measureDistance_cm()
