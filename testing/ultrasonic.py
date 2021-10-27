@@ -6,13 +6,13 @@ Created on Sep 25 09:05:03 2021
 """
 import RPI.GPIO as GPIO 
 import time
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 
 def GPIO_init():
     global TRIG
-    TRIG = 23 
+    TRIG = 16 
     global ECHO
-    ECHO = 24
+    ECHO = 18
     GPIO.setup (TRIG, GPIO.OUT, initial=GPIO.LOW) 
     GPIO.setup (ECHO, GPIO.IN)
     
