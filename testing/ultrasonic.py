@@ -4,11 +4,11 @@ Created on Sep 25 09:05:03 2021
 #reference https://thepihut.com/blogs/raspberry-pi-tutorials/hc-sr04-ultrasonic-range-sensor-on-the-raspberry-pi
 @author: pcochang
 """
- import RPI.GPIO as GPIO 
- import time 
+import RPI.GPIO as GPIO 
+import time
+GPIO.setmode(GPIO.BCM)
 
 def GPIO_init():
-    GPIO.setmode(GPIO.BCM)
     TRIG = 23 ECHO = 24
     GPIO.setup (TRIG, GPIO.OUT, initial=GPIO.LOW) 
     GPIO.setup (ECHO, GPIO.IN)
