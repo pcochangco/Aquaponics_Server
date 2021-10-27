@@ -5,7 +5,7 @@ Created on Sep 25 09:05:03 2021
 @author: pcochang
 """
 
-def GPIOinit():
+def GPIO_sonic_init():
     import RPI.GPIO as GPIO import time 
     GPIO.setmode(GPIO.BCM)
     TRIG = 23 ECHO = 24
