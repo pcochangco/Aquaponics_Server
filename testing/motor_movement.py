@@ -20,7 +20,7 @@ def GPIO_init():
     EN1.start(0)  
 
 def runMotor():
-    print ("Motor running")
+    print ("Motor running for 3 seconds")
     if True:
         EN1.ChangeDutyCycle(50) #50% dutycycle
         GPIO.output(Motor1['input1'], GPIO.HIGH)
