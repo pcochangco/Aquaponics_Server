@@ -9,12 +9,15 @@ import time
 GPIO.setmode(GPIO.BCM)
 
 def GPIO_init():
-    TRIG = 23 ECHO = 24
+    global TRIG
+    TRIG = 23 
+    global ECHO
+    ECHO = 24
     GPIO.setup (TRIG, GPIO.OUT, initial=GPIO.LOW) 
     GPIO.setup (ECHO, GPIO.IN)
     
     
-def measureDistance_cm(TRIG = 23 ,ECHO = 24):
+def measureDistance_cm():
     GPIO.output (TRIG, True) 
     time.sleep(0.00001) 
     GPIO.output (TRIG, False)
