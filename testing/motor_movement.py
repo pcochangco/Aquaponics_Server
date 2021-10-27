@@ -7,12 +7,12 @@ Created on Wed Oct 27 15:06:28 2021
 
 import RPi.GPIO as GPIO
 from time import sleep
-GPIO.setmode(GPIO.BCM)
+GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
 def GPIO_init():
     global Motor1
-    Motor1 = {'EN': 19, 'input1': 21, 'input2': 22}
+    Motor1 = {'EN': 11, 'input1': 13, 'input2': 15}
     for x in Motor1:
         GPIO.setup(Motor1[x], GPIO.OUT)
     global EN1
