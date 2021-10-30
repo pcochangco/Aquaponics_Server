@@ -4,51 +4,47 @@ Created on Sep 23 13:00:44 2021
 
 @author: pcochang
 """
+#!/usr/bin/env python3
 
 import socket
+import time
 
-host = ''
-port = 1403
-
-data_to_send = "This is a placeholder for lettuce area"
-
-def setupServer():
-    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    print("Socket for Piserver created")
-    try:
-        s.bind((host,port))
-    except:
-        print(socket.error)
-    print("Socket bind complete, waiting for connection")
-    return s
-
-def setupConnection(s):  
-    s.listen(1) #listen to 1 socket at a time
-    conn, addr = s.accept()
-    print("Now connected to:",addr[0])
-    return conn
-
-def dataTransfer(conn):
-    try:
-        dataFromClient = conn.recv(1024)  # receive data from client
-        dataFromClient = dataFromClient.decode('utf-8')
-        print("Received request:", dataFromClient)
-        
-        ######define function here to get the lettuce area
-        
-        #send back the message(area of lettuce) to the Client
-        conn.sendall(str.encode(data_to_send))
-    except:
-        print("Lost connection, now waiting for connection. . .")
-    
+HOST = ''  # Standard loopback interface address (localhost)
+PORT = 65432        # Port to listen on (non-privileged ports are > 1023)
 
 
-while True:
-    try:
-        s = setupServer()
-        conn = setupConnection(s)  #this is where we wait for client request
-        dataTransfer(conn)
-        s.close()
-    except:
-        print("The Program encountered an error")
-    
+def Lettuce_area(): #sample function for lettuce area computation
+    time.sleep(5)
+    return 100
+
+def sendtoClient():
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
+        try:
+            s.bind((HOST, PORT))
+            s.listen()
+            print("Successful bind")
+        except Exception as e:
+            print(e)
+            time.sleep(1)
+
+        while True:
+            try:
+                print("Waiting for connection to accept")
+                conn, addr = s.accept()
+                break
+            except Exception as e:
+                print(e)
+                time.sleep(1)
+
+        print("Connection accepted")
+        with conn:
+            print('Connected by', addr)
+            while True:
+                data = conn.recv(1024)
+                print("Received from Client:",data.decode('utf-8'))
+                if not data:
+                    break
+                conn.sendall(str.encode(str(Lettuce_area())))
+                
+sendtoClient()
