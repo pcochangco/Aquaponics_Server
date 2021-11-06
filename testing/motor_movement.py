@@ -4,32 +4,67 @@ Created on Wed Oct 27 15:06:28 2021
 
 @author: pcochang
 """
+# -*- coding: utf-8 -*-
+"""
+Created on Sat Nov  6 15:55:43 2021
 
+@author: pcochang
+"""
+
+#!/usr/bin/python3
 import RPi.GPIO as GPIO
-from time import sleep
+import time
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 
-def GPIO_init():
-    global Motor1
-    Motor1 = {'EN': 11, 'input1': 13, 'input2': 15}
-    for x in Motor1:
-        GPIO.setup(Motor1[x], GPIO.OUT)
-    global EN1
-    EN1 = GPIO.PWM(Motor1['EN'], 100)    
-    EN1.start(0)  
+in1 = 11
+in2 = 12
+in3 = 13
+in4 = 15
+ 
+motor_pins = [in1,in2,in3,in4]
+motor_step_counter = 0
 
-def runMotor():
-    print ("Motor running for 3 seconds")
-    if True:
-        EN1.ChangeDutyCycle(50) #50% dutycycle
-        GPIO.output(Motor1['input1'], GPIO.HIGH)
-        GPIO.output(Motor1['input2'], GPIO.LOW)
-        sleep(3)
-        #if some conditions here:
-            #break
-    print ("STOP")
-    EN1.ChangeDutyCycle(0)
-    
-GPIO_init()
-runMotor()
+GPIO.setup( in1, GPIO.OUT )
+GPIO.setup( in2, GPIO.OUT )
+GPIO.setup( in3, GPIO.OUT )
+GPIO.setup( in4, GPIO.OUT )
+
+# careful lowering this, at some point you run into the mechanical limitation of how quick your motor can move
+step_sleep = 0.002
+step_count = 4096 # 5.625*(1/64) per step, 4096 steps is 360°
+direction = False # True for clockwise, False for counter-clockwise
+# defining stepper motor sequence (found in documentation http://www.4tronix.co.uk/arduino/Stepper-Motors.php)
+step_sequence = [[1,0,0,1],
+                 [1,0,0,0],
+                 [1,1,0,0],
+                 [0,1,0,0],
+                 [0,1,1,0],
+                 [0,0,1,0],
+                 [0,0,1,1],
+                 [0,0,0,1]]
+ 
+def cleanup():
+    GPIO.output( in1, 0 )
+    GPIO.output( in2, 0 )
+    GPIO.output( in3, 0 )
+    GPIO.output( in4, 0 )
+ 
+ 
+cleanup()
+try:
+    i = 0
+    for i in range(step_count):
+        for x, pin in enumerate(motor_pins):
+            GPIO.output( pin, step_sequence[motor_step_counter][x] )
+        if direction==True:
+            motor_step_counter = (motor_step_counter - 1) % 8
+        elif direction==False:
+            motor_step_counter = (motor_step_counter + 1) % 8
+        time.sleep( step_sleep )
+ 
+except KeyboardInterrupt:
+    cleanup()
+ 
+cleanup()
+
