@@ -31,7 +31,7 @@ GPIO.setup( in3, GPIO.OUT )
 GPIO.setup( in4, GPIO.OUT )
 
 # careful lowering this, at some point you run into the mechanical limitation of how quick your motor can move
-step_sleep = 0.002
+step_sleep = 0.001
 step_count = 4096 # 5.625*(1/64) per step, 4096 steps is 360°
 direction = False # True for clockwise, False for counter-clockwise
 # defining stepper motor sequence (found in documentation http://www.4tronix.co.uk/arduino/Stepper-Motors.php)
@@ -53,16 +53,16 @@ def cleanup():
  
 cleanup()
 try:
-    i = 0
-    for i in range(step_count):
-        for x, pin in enumerate(motor_pins):
-            GPIO.output( pin, step_sequence[motor_step_counter][x] )
-        if direction==True:
-            motor_step_counter = (motor_step_counter - 1) % 8
-        elif direction==False:
-            motor_step_counter = (motor_step_counter + 1) % 8
-        time.sleep( step_sleep )
- 
+    for d in [False,True,False, True]:
+        direction = x
+        for i in range(step_count):
+            for x, pin in enumerate(motor_pins):
+                GPIO.output( pin, step_sequence[motor_step_counter][x] )
+            if direction==True:
+                motor_step_counter = (motor_step_counter - 1) % 8
+            elif direction==False:
+                motor_step_counter = (motor_step_counter + 1) % 8
+            time.sleep( step_sleep )
 except KeyboardInterrupt:
     cleanup()
  
