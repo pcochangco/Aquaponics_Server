@@ -53,8 +53,9 @@ def cleanup():
  
 cleanup()
 try:
-    for d in [False,True,False, True]:
-        direction = x
+    for d in [False, False, False, False, True,True,True, True]:
+        direction = d
+        time.sleep(3)
         for i in range(step_count):
             for x, pin in enumerate(motor_pins):
                 GPIO.output( pin, step_sequence[motor_step_counter][x] )
