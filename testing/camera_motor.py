@@ -109,7 +109,7 @@ def process_Image(directory):
             overall_area.append(Area)
             # show the images
             #cv2.imshow( result)
-            cv2.imwrite(os.path.join("/home/pi/Pictures0/results/", filename), result)
+            cv2.imwrite(os.path.join(directory+"results/", filename), result)
     image_pixel_ratio = round(sum(overall_area)/len(overall_area),2)
     size = ratio_to_actual(image_pixel_ratio)
     print("Lettuce average size is", size)
