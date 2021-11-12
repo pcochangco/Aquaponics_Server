@@ -105,14 +105,14 @@ def process_Image(directory):
                 x,y,w,h = cv2.boundingRect(target_contour)
                 cv2.rectangle(result,(x,y),(x+w,y+h),(0,255,0),3)
             Area =  round(100*cv2.contourArea(target_contour)/(image.shape[0]*image.shape[1]),2)
-            print("Lettuce pixel ratio is: ", Area)
+            Area = ratio_to_actual(Area)
+            print("Lettuce area is {} cm".format(Area))
             overall_area.append(Area)
             # show the images
             #cv2.imshow( result)
             cv2.imwrite(os.path.join(directory+"results/", filename), result)
-    image_pixel_ratio = round(sum(overall_area)/len(overall_area),2)
-    size = ratio_to_actual(image_pixel_ratio)
-    print("Lettuce average size is", size)
+    size = round(sum(overall_area)/len(overall_area),2)
+    print("Lettuce average size is {} cm".format(size))
     return size
 
 
