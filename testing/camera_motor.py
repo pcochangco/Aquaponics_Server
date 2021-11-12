@@ -10,9 +10,12 @@ import cv2
 import math
 import os, shutil
 import time
+import timeit
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
+
+start_with_motor = timeit.default_timer()
 
 def delete_img(folder):
     for filename in os.listdir(folder):
@@ -79,8 +82,10 @@ def get_max_contour(contours):
     return c
 
 def process_Image(directory):
+    global start_image_processing, stop_image_processing
     overall_area = []
     for filename in os.listdir(directory):
+        start_image_processing = timeit.default_timer()
         if filename.endswith(".jpg"):
             image = cv2.imread(os.path.join(directory, filename))
             mask = get_lettuce_mask(image)
@@ -104,14 +109,17 @@ def process_Image(directory):
                 cv2.drawContours(result, target_contour, -1, 255, 2)
                 x,y,w,h = cv2.boundingRect(target_contour)
                 cv2.rectangle(result,(x,y),(x+w,y+h),(0,255,0),3)
+            cv2.imwrite(os.path.join(directory+"results/", filename), result)
+            
             Area =  round(100*cv2.contourArea(target_contour)/(image.shape[0]*image.shape[1]),2)
             Area = ratio_to_actual(Area)
             print("Lettuce area is {} cm".format(Area))
             overall_area.append(Area)
             # show the images
             #cv2.imshow( result)
-            cv2.imwrite(os.path.join(directory+"results/", filename), result)
-    size = round(sum(overall_area)/len(overall_area),2)
+        stop_image_processing = timeit.default_timer()
+    try: size = round(sum(overall_area)/len(overall_area),2)
+    except: size = 0
     print("Lettuce average size is {} cm".format(size))
     return size
 
@@ -154,7 +162,10 @@ cleanup()
 try:
     for d in [ (False,step_count), (False,step_count), (False, step_count), (True, step_count*3)]:
         direction = d[0]
-        takeImage(directory)
+        try: takeImage(directory)
+        except Exception as e: 
+            print(" Can't open Camera setup...\n", e)
+            time.sleep(3)
         for i in range(d[1]):
             for x, pin in enumerate(motor_pins):
                 GPIO.output( pin, step_sequence[motor_step_counter][x] )
@@ -169,7 +180,14 @@ except KeyboardInterrupt:
 cleanup()
 print("")
 print("Computing the area...")
-process_Image(directory)
+try: 
+    process_Image(directory)
+    print("Image processing time per image: ", stop_image_processing - start_image_processing)
+except Exception as e: print(" Can't open Camera setup...\n", e)
+stop_with_motor = timeit.default_timer()
+print("")
+print("Image processing time per image: ", stop_image_processing - start_image_processing)
+print("Overall time including motor run: ", stop_with_motor - start_with_motor)
 
 
 
