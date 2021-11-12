@@ -24,14 +24,14 @@ def delete_img(folder):
             break
     return folder
 
-def takeImage():
+def takeImage(directory):
     from picamera import PiCamera
     camera = PiCamera()
     time.sleep(2)
     camera.resolution = (1280, 720)
     camera.vflip = True
     camera.contrast = 10
-    file_name = "/home/pi/Pictures0/img_" + str(time.time()) + ".jpg"
+    file_name = os.path.join(directory,"img_" + str(time.time()) + ".jpg")
     camera.capture(file_name)
     print("Picture taken.")
     
@@ -49,14 +49,14 @@ def get_lettuce_mask(frame):
 #get center of contoured image
 def center(contours, image):
     image_y, image_x, _ = image.shape
-    cnts = [x for x in contours if cv2.contourArea(x) > image_x*image_y*0.05]
+    cnts = [x for x in contours if cv2.contourArea(x) > image_x*image_y*0.01]
     distance = []
     for c in cnts:
         M = cv2.moments(c)
         if M['m00'] != 0:
             cx = int(M['m10']/M['m00'])
             cy = int(M['m01']/M['m00'])
-            cv2.circle(image,(cx,cy),25,(255,255,0),10)
+            cv2.circle(image,(cx,cy),20,(255,255,0),10)
         distance.append(math.sqrt(((cx-image_x/2)**2)+((cy-image_y/2)**2)))
         #cv2.line(image, (cx,cy), (int(image_x/2),int(image_y/2)), [0, 255, 0], 2)
     #print(distance)
@@ -75,8 +75,7 @@ def get_max_contour(contours):
     c = max(contours, key = cv2.contourArea)
     return c
 
-def process_Image():
-    directory = "/home/pi/Pictures0/"
+def process_Image(directory):
     overall_area = []
     for filename in os.listdir(directory):
         if filename.endswith(".jpg"):
@@ -103,16 +102,16 @@ def process_Image():
                 x,y,w,h = cv2.boundingRect(target_contour)
                 cv2.rectangle(result,(x,y),(x+w,y+h),(0,255,0),3)
             Area =  round(100*cv2.contourArea(target_contour)/(image.shape[0]*image.shape[1]),2)
-            print("Lettuce pixel ratio is: ", Area)
+            Area = ratio_to_actual(Area)
+            print("Lettuce area is {} cm".format(Area))
             overall_area.append(Area)
             # show the images
             #cv2.imshow( result)
-            cv2.imwrite(os.path.join("/home/pi/Pictures0/results/", filename), result)
-    image_pixel_ratio = round(sum(overall_area)/len(overall_area),2)
-    size = ratio_to_actual(image_pixel_ratio)
-    print("Image size is", size)
+            cv2.imwrite(os.path.join(directory+"results/", filename), result)
+    size = round(sum(overall_area)/len(overall_area),2)
+    print("Lettuce average size is {} cm".format(size))
     return size
-
+    
 directory = delete_img("/home/pi/Pictures0/")
-#move motor
-takeImage()
+takeImage(directory)
+process_Image(directory)
