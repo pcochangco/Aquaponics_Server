@@ -52,14 +52,14 @@ def get_lettuce_mask(frame):
 #get center of contoured image
 def center(contours, image):
     image_y, image_x, _ = image.shape
-    cnts = [x for x in contours if cv2.contourArea(x) > image_x*image_y*0.05]
+    cnts = [x for x in contours if cv2.contourArea(x) > image_x*image_y*0.01]
     distance = []
     for c in cnts:
         M = cv2.moments(c)
         if M['m00'] != 0:
             cx = int(M['m10']/M['m00'])
             cy = int(M['m01']/M['m00'])
-            cv2.circle(image,(cx,cy),25,(255,255,0),10)
+            cv2.circle(image,(cx,cy),20,(255,255,0),10)
         distance.append(math.sqrt(((cx-image_x/2)**2)+((cy-image_y/2)**2)))
         #cv2.line(image, (cx,cy), (int(image_x/2),int(image_y/2)), [0, 255, 0], 2)
     #print(distance)
