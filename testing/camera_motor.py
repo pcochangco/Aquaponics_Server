@@ -43,7 +43,7 @@ def takeImage(directory):
     
     
 def ratio_to_actual(image_pixel_ratio):
-    return image_pixel_ratio
+    return image_pixel_ratio * 1
 
 def get_lettuce_mask(frame):
     hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
