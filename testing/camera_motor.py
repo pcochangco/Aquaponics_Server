@@ -15,6 +15,7 @@ import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
 from picamera import PiCamera
+camera = PiCamera()
 
 start_with_motor = timeit.default_timer()
 
@@ -35,7 +36,6 @@ def delete_img(folder):
     return folder
 
 def takeImage(directory):
-    camera = PiCamera()
     time.sleep(2)
     camera.resolution = (1280, 720)
     camera.vflip = False
