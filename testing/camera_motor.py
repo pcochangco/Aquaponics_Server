@@ -159,6 +159,7 @@ def cleanup():
     GPIO.output( in4, 0 )
     
 directory = "/home/pi/Pictures0/"
+delete_img(directory)
 cleanup()
 try:
     for d in [ (False,step_count), (False,step_count), (False, step_count), (True, step_count*3)]:
@@ -184,7 +185,6 @@ print("Computing the area...")
 try: 
     process_Image(directory)
     print("Image processing time per image: ", stop_image_processing - start_image_processing)
-    delete_img(directory)
 except Exception as e: print(" Can't open Camera setup...\n", e)
 stop_with_motor = timeit.default_timer()
 print("")
