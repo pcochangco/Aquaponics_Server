@@ -14,6 +14,7 @@ import timeit
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
+from picamera import PiCamera
 
 start_with_motor = timeit.default_timer()
 
@@ -34,7 +35,6 @@ def delete_img(folder):
     return folder
 
 def takeImage(directory):
-    from picamera import PiCamera
     camera = PiCamera()
     time.sleep(2)
     camera.resolution = (1280, 720)
@@ -189,11 +189,11 @@ print("")
 print("Computing the area...")
 try: 
     process_Image(directory)
-    print("Image processing time per image: ", stop_image_processing - start_image_processing)
+    print("Image processing time per image: {}sec ".format(round(stop_image_processing - start_image_processing,2)))
 except Exception as e: print(" Can't open Camera setup...\n", e)
 stop_with_motor = timeit.default_timer()
 print("")
-print("Overall time including motor run: ", stop_with_motor - start_with_motor)
+print("Overall time including motor run: {}sec".format(round(stop_with_motor - start_with_motor,2)))
 
 
 
