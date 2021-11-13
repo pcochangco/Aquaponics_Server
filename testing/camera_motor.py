@@ -117,14 +117,14 @@ def process_Image(directory):
             
             Area =  round(100*cv2.contourArea(target_contour)/(image.shape[0]*image.shape[1]),2)
             Area = ratio_to_actual(Area)
-            print("Lettuce area is {} cm".format(Area))
+            print("Lettuce area is {} in^2".format(Area))
             overall_area.append(Area)
             # show the images
             #cv2.imshow( result)
         stop_image_processing = timeit.default_timer()
     try: size = round(sum(overall_area)/len(overall_area),2)
     except: size = 0
-    print("Lettuce average size is {} cm".format(size))
+    print("Lettuce average size is {} in^2".format(size))
     return size
 
 
