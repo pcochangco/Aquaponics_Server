@@ -116,6 +116,8 @@ def process_Image(directory):
     return size
     
 directory = "/home/pi/Pictures0/"
+results_path = "/home/pi/results"
 directory = delete_img(directory)
+delete_img(results_path)
 takeImage(directory)
 process_Image(directory)
