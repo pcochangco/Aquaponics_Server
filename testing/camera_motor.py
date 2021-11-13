@@ -38,7 +38,7 @@ def takeImage(directory):
     camera = PiCamera()
     time.sleep(2)
     camera.resolution = (1280, 720)
-    camera.vflip = True
+    camera.vflip = False
     camera.contrast = 10
     file_name = os.path.join(directory,"img_" + str(time.time()) + ".jpg")
     camera.capture(file_name)
