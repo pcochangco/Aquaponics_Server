@@ -12,16 +12,19 @@ import os, shutil
 import time
 
 def delete_img(folder):
-    for filename in os.listdir(folder):
-        file_path = os.path.join(folder, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except:
-            folder = "/home/pi/Pictures0_" + str(time.time()) +"/"
-            break
+    try:
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except:
+                folder = "/home/pi/Pictures0_" + str(time.time()) +"/"
+                os.mkdir(folder)
+                break
+    except: os.mkdir(folder)
     return folder
 
 def takeImage(directory):
@@ -112,6 +115,7 @@ def process_Image(directory):
     print("Lettuce average size is {} cm".format(size))
     return size
     
-directory = delete_img("/home/pi/Pictures0/")
+directory = "/home/pi/Pictures0/"
+directory = delete_img(directory)
 takeImage(directory)
 process_Image(directory)
