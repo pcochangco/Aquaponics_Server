@@ -186,7 +186,6 @@ try:
 except Exception as e: print(" Can't open Camera setup...\n", e)
 stop_with_motor = timeit.default_timer()
 print("")
-print("Image processing time per image: ", stop_image_processing - start_image_processing)
 print("Overall time including motor run: ", stop_with_motor - start_with_motor)
 
 
