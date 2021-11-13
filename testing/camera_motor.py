@@ -18,16 +18,19 @@ GPIO.setwarnings(False)
 start_with_motor = timeit.default_timer()
 
 def delete_img(folder):
-    for filename in os.listdir(folder):
-        file_path = os.path.join(folder, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                shutil.rmtree(file_path)
-        except:
-            folder = "/home/pi/Pictures0_" + str(time.time()) +"/"
-            break
+    try:
+        for filename in os.listdir(folder):
+            file_path = os.path.join(folder, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except:
+                folder = "/home/pi/Pictures0_" + str(time.time()) +"/"
+                os.mkdir(folder)
+                break
+    except: os.mkdir(folder)
     global directory
     directory = folder
 
