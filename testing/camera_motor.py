@@ -28,7 +28,8 @@ def delete_img(folder):
         except:
             folder = "/home/pi/Pictures0_" + str(time.time()) +"/"
             break
-    return folder
+    global directory
+    directory = folder
 
 def takeImage(directory):
     from picamera import PiCamera
@@ -157,7 +158,7 @@ def cleanup():
     GPIO.output( in3, 0 )
     GPIO.output( in4, 0 )
     
-directory = delete_img("/home/pi/Pictures0/")
+directory = "/home/pi/Pictures0/"
 cleanup()
 try:
     for d in [ (False,step_count), (False,step_count), (False, step_count), (True, step_count*3)]:
@@ -183,6 +184,7 @@ print("Computing the area...")
 try: 
     process_Image(directory)
     print("Image processing time per image: ", stop_image_processing - start_image_processing)
+    delete_img(directory)
 except Exception as e: print(" Can't open Camera setup...\n", e)
 stop_with_motor = timeit.default_timer()
 print("")
