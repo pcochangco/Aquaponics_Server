@@ -31,8 +31,7 @@ def delete_img(folder):
                 os.mkdir(folder)
                 break
     except: os.mkdir(folder)
-    global directory
-    directory = folder
+    return folder
 
 def takeImage(directory):
     from picamera import PiCamera
@@ -164,7 +163,9 @@ def cleanup():
     GPIO.output( in4, 0 )
     
 directory = "/home/pi/Pictures0/"
-delete_img(directory)
+results_path = "/home/pi/results"
+directory = delete_img(directory)
+delete_img(results_path)
 cleanup()
 try:
     for d in [ (False,step_count), (False,step_count), (False, step_count), (True, step_count*3)]:
