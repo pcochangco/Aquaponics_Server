@@ -113,7 +113,9 @@ def process_Image(directory):
                 cv2.drawContours(result, target_contour, -1, 255, 2)
                 x,y,w,h = cv2.boundingRect(target_contour)
                 cv2.rectangle(result,(x,y),(x+w,y+h),(0,255,0),3)
-            cv2.imwrite(os.path.join(directory+"results/", filename), result)
+            results_path = os.path.join(directory+"results/"
+            try: cv2.imwrite(results_path, filename), result)
+            except: os.mkdir(results_path)
             
             Area =  round(100*cv2.contourArea(target_contour)/(image.shape[0]*image.shape[1]),2)
             Area = ratio_to_actual(Area)
