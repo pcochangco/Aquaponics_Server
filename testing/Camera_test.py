@@ -10,6 +10,7 @@ import cv2
 import math
 import os, shutil
 import time
+from picamera import PiCamera
 
 def delete_img(folder):
     try:
@@ -28,11 +29,10 @@ def delete_img(folder):
     return folder
 
 def takeImage(directory):
-    from picamera import PiCamera
     camera = PiCamera()
     time.sleep(2)
     camera.resolution = (1280, 720)
-    camera.vflip = True
+    camera.vflip = False
     camera.contrast = 10
     file_name = os.path.join(directory,"img_" + str(time.time()) + ".jpg")
     camera.capture(file_name)
