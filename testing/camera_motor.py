@@ -14,9 +14,7 @@ import timeit
 import RPi.GPIO as GPIO
 GPIO.setmode(GPIO.BOARD)
 GPIO.setwarnings(False)
-from picamera import PiCamera
-camera = PiCamera()
-time.sleep(2)
+import picamera
 
 start_with_motor = timeit.default_timer()
 
@@ -37,12 +35,14 @@ def delete_img(folder):
     return folder
 
 def takeImage(directory):
-    camera.resolution = (1280, 720)
-    camera.vflip = False
-    camera.contrast = 10
-    file_name = os.path.join(directory,"img_" + str(time.time()) + ".jpg")
-    camera.capture(file_name)
-    print("Picture taken.")
+    with picamera.PiCamera() as camera:
+        time.sleep(2)
+        camera.resolution = (1280, 720)
+        camera.vflip = False
+        camera.contrast = 10
+        file_name = os.path.join(directory,"img_" + str(time.time()) + ".jpg")
+        camera.capture(file_name)
+        print("Picture taken.")
     
     
 def ratio_to_actual(image_pixel_ratio):
